@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POADDA | Welcome</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    background:#fafafa;
+    height:100vh;
+}
+
+.app{
+    display:flex;
+    height:100vh;
+}
+
+/* LEFT PANEL */
+.left-panel{
+    width:35%;
+    background:linear-gradient(135deg,#f9d423,#ff4e50);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    position:relative; /* ✅ needed for button positioning */
+}
+
+.left-content{
+    text-align:center;
+}
+
+.left-content img{
+    width:170px;
+    animation:float 3s ease-in-out infinite;
+}
+
+.left-content h2{
+    margin-top:20px;
+    font-weight:500;
+    letter-spacing:1px;
+}
+
+/* ✅ BACK BUTTON */
+.left-back-btn{
+    position:absolute;
+    bottom:25px;
+    left:25px;
+    background:rgba(0,0,0,0.25);
+    border:none;
+    color:#fff;
+    padding:10px 16px;
+    border-radius:14px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.left-back-btn:hover{
+    background:rgba(0,0,0,0.35);
+}
+
+/* Logo Float */
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+    100%{transform:translateY(0);}
+}
+
+/* RIGHT PANEL */
+.right-panel{
+    width:65%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+/* Glass Card */
+.glass-box{
+    width:100%;
+    max-width:420px;
+    background:rgba(255,255,255,0.35);
+    backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
+    border-radius:22px;
+    padding:40px 25px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+    text-align:center;
+}
+
+.card{
+    background:rgba(255,255,255,0.6);
+    border-radius:18px;
+    padding:25px;
+    margin:18px 0;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card i{
+    font-size:40px;
+    color:#0b8457;
+    margin-bottom:12px;
+}
+
+.card h3{
+    margin:0;
+    color:#333;
+}
+
+.card:hover{
+    transform:translateY(-8px) scale(1.03);
+    box-shadow:0 20px 40px rgba(11,132,87,0.3);
+}
+
+@media(max-width:900px){
+    .app{
+        flex-direction:column;
+    }
+
+    .left-panel{
+        width:100%;
+        height:40%;
+        border-bottom-left-radius:25px;
+        border-bottom-right-radius:25px;
+    }
+
+    .right-panel{
+        width:100%;
+        height:60%;
+    }
+
+    .glass-box{
+        margin-top:-40px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+        <div class="left-content">
+            <img src="logo.png" alt="POADDA">
+            <h2>Your Preparation Zone</h2>
+        </div>
+
+        <!-- ✅ BACK BUTTON -->
+        <button class="left-back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+        <div class="glass-box">
+
+            <div class="card" onclick="location.href='login.html'">
+                <i class="fas fa-sign-in-alt"></i>
+                <h3>Login</h3>
+            </div>
+
+            <div class="card" onclick="location.href='signup.html'">
+                <i class="fas fa-user-plus"></i>
+                <h3>Sign Up</h3>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+function goBack(){
+    location.href='home.html'
+}
+</script>
+
+</body>
+</html>

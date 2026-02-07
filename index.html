@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POADDA - A Journey Towards Excellence</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Mukta:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Mukta",sans-serif}
+body{background:#ffffff}
+
+/* ================= HEADER ================= */
+header{
+  background:linear-gradient(135deg,#0b6b3a,#16a34a,#22c55e,#0ea5a4);
+  padding:55px 20px;
+  text-align:center;
+  color:white;
+  position:relative;
+  overflow:hidden;
+}
+header::after{
+  content:"";
+  position:absolute;
+  inset:-50%;
+  background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 60%);
+  animation:rotateGlow 12s linear infinite;
+}
+@keyframes rotateGlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+.logo img{
+  width:150px;
+  animation:pulse 3s infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+.caption{
+  margin-top:18px;
+  font-family:'Libre Baskerville', serif;
+  font-size:2.4rem;
+}
+
+/* ================= MAIN ================= */
+.main-container{
+  width:92%;
+  margin:60px auto;
+  display:flex;
+  gap:35px;
+}
+
+/* ================= NEWS ================= */
+.news-box{
+  flex:2;
+  padding:30px;
+  border-radius:20px;
+  border:3px solid #00cfa5;
+
+ box-shadow:
+    0 0 25px rgba(0,255,200,0.8),
+    0 0 20px rgba(0,255,200,0.6);
+
+  animation:newsGlow 2.5s ease-in-out infinite alternate;
+}
+ 
+.news-box h2{margin-bottom:10px}
+
+/* ================= FEATURES ================= */
+.features-box{
+  flex:1;
+  padding:30px;
+  border-radius:18px;
+  border:3px solid #00cfa5;
+}
+.features-box ul{list-style:none}
+.features-box li{
+  padding:12px 0;
+  font-weight:600;
+  transition:.4s;
+}
+.features-box li:hover{
+  transform:translateX(8px);
+  color:#1b5e20;
+}
+
+/* ================= SECTION TITLE ================= */
+.section-title{
+  width:92%;
+  margin:80px auto 40px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.section-title::before,
+.section-title::after{
+  content:"";
+  flex:1;
+  height:3px;
+  background:linear-gradient(to right,transparent,#1e88e5,transparent);
+}
+
+/* ================= ASPIRANTS ================= */
+.aspirants-container{
+  width:92%;
+  margin:0 auto 80px;
+  display:flex;
+  gap:35px;
+}
+.aspirants-box{
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  border:4px solid #1e88e5;
+  transition:.4s;
+}
+.aspirants-box:hover{transform:translateY(-6px)}
+.wide-box{flex:1.6}
+.normal-box{flex:1}
+
+/* ================= PREPARATION ZONE BUTTON ================= */
+.study-zone{
+  text-align:center;
+  margin:90px 0 60px;
+}
+.study-zone a{
+  display:inline-block;
+  padding:26px 70px;
+  font-size:1.7rem;
+  font-weight:900;
+  color:#ffffff;
+  text-decoration:none;
+  border-radius:70px;
+  background:linear-gradient(135deg,#1e88e5,#00cfa5);
+  box-shadow:
+    0 0 25px rgba(0,200,255,0.8),
+    0 0 60px rgba(0,255,200,0.6);
+  animation:pulseBtn 2.5s infinite;
+  transition:.4s ease;
+}
+.study-zone a:hover{
+  transform:scale(1.12);
+  box-shadow:
+    0 0 40px rgba(0,200,255,1),
+    0 0 90px rgba(0,255,200,1);
+}
+
+@keyframes pulseBtn{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+}
+
+/* ================= OUR OFFER ================= */
+.offer-section{
+  width:92%;
+  margin:80px auto 180px; /* increased bottom space */
+}
+
+.offer-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:25px;
+}
+/* ================= OUR OFFER (UPDATED DESIGN) ================= */
+.offer-card{
+  padding:15px;
+  text-align:center;
+  border-radius:20px;
+  font-weight:800;
+  background:#ffffff;
+  cursor:pointer;
+  transition:.4s;
+  border:2px solid #00cfa5;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
+.offer-card img{
+  width:100%;
+  height:150px;
+  object-fit:contain;
+  border-radius:14px;
+  margin-bottom:15px;
+}
+
+.offer-card span{
+  display:block;
+  font-size:1.2rem;
+  color:#0b6b3a;
+}
+
+.offer-card:hover{
+  transform:translateY(-10px) scale(1.05);
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  background:#e0f2f1;
+}
+
+/* ================= FOOTER ================= */
+footer{
+  background:#0b6b3a;
+  color:white;
+  padding:40px 20px;
+  text-align:center;
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+  .main-container,.aspirants-container{flex-direction:column}
+}
+.section-divider{
+  width:80%;
+  height:3px;
+  margin:60px auto;
+  background:linear-gradient(to right, transparent, #00cfa5, #1e88e5, transparent);
+  border-radius:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="logo.png">
+  </div>
+  <div class="caption">POADDA – A Journey Towards Excellence</div>
+</header>
+
+<div class="main-container">
+
+  <div class="news-box">
+    <h2>News & Updates</h2>
+    <p>Stay updated with the latest departmental exam notifications, test launches, and important announcements.</p>
+  </div>
+
+  <div class="features-box">
+    <h2>Our Features</h2>
+    <ul>
+      <li>📘 Concept-focused Detailed Notes</li>
+      <li>📝 Chapter-wise Practice Tests</li>
+      <li>📄 Full Length Mock Tests (Exam Pattern Based)</li>
+      <li>📊 Smart Student Performance Dashboard</li>
+      <li>⚡ Simple, Fast & Easy-to-Access Platform</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="section-title">
+  <h2>Aspirants’ Guidance</h2>
+</div>
+
+<div class="aspirants-container">
+
+  <div class="aspirants-box wide-box">
+    <h3>Know your Scope in Department of Post</h3>
+    <ul>
+      <li>✔ Clear career growth pathways</li>
+      <li>✔ Departmental & promotional examinations</li>
+      <li>✔ Long-term stability and opportunities</li>
+    </ul>
+  </div>
+
+  <div class="aspirants-box normal-box">
+    <h3>Exam Schedule 2026</h3>
+    <ul>
+      <li>MTS Examination</li>
+      <li>Postman / Mail Guard Examination</li>
+      <li>Postal Assistant Examination</li>
+      <li>Inspector of Posts Examination</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="study-zone">
+  <a href="https://poaddain.github.io/POADDA.in/pre.html">
+    Enter your Preparation Zone 🚀
+  </a>
+</div>
+
+<div class="offer-section">
+  <div class="section-title">
+    <h2>Our Offer</h2>
+  </div>
+
+  <div class="offer-grid">
+  <div class="offer-card" onclick="location.href='mts.html'">
+    <img src="mts.png" alt="MTS Exam">
+    <span>MTS Exam</span>
+  </div>
+
+  <div class="offer-card" onclick="location.href='postman.html'">
+    <img src="postman.png" alt="Postman Exam">
+    <span>Postman Exam</span>
+  </div>
+
+  <div class="offer-card" onclick="location.href='pa.html'">
+    <img src="pasa.png" alt="PA / SA Exam">
+    <span>PA / SA Exam</span>
+  </div>
+
+  <div class="offer-card" onclick="location.href='ip.html'">
+    <img src="ipo.png" alt="IPO Exam">
+    <span>Inspector of Posts</span>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<footer>
+  <h3>Contact Us</h3>
+  <p>Email: support@poadda.in | Mobile: +91-XXXXXXXXXX</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Purchase Courses</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:"Poppins","Segoe UI",sans-serif;
+}
+body{
+  margin:0;
+  background:linear-gradient(135deg,#eaf4ff,#f7fbff);
+  color:#0f2a44;
+}
+.container{
+  display:flex;
+  min-height:100vh;
+}
+.left-panel{
+  width:35%;
+  padding:30px;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(10px);
+  border-right:1px solid #d7e7f7;
+  display:flex;
+  flex-direction:column;
+}
+.logo{
+  text-align:center;
+  margin-bottom:15px;
+}
+.logo img{
+  max-width:160px;
+}
+.caption{
+  text-align:center;
+  font-size:18px;
+  font-weight:600;
+  color:#0a66c2;
+  margin-bottom:30px;
+}
+.course-card{
+  background:#eef6ff;
+  padding:18px;
+  margin-bottom:18px;
+  border-radius:16px;
+  text-align:center;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+  border:1px solid #d6e8ff;
+}
+.course-card:hover{
+  background:#cfe7ff;
+  transform:translateY(-5px);
+  box-shadow:0 10px 22px rgba(0,0,0,0.15);
+}
+.back-btn{
+  margin-top:auto;
+  background:#d9ecff;
+  color:#0a3d62;
+  border:none;
+  padding:10px;
+  border-radius:22px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.3s;
+}
+.back-btn:hover{
+  background:#bcdfff;
+}
+.right-panel{
+  width:65%;
+  padding:35px;
+}
+.student-info{
+  display:flex;
+  justify-content:flex-end;
+  gap:15px;
+  margin-bottom:35px;
+}
+.student-info span{
+  background:#eaf4ff;
+  padding:10px 18px;
+  border-radius:25px;
+  font-weight:600;
+  border:1px solid #d6e8ff;
+}
+.options-title{
+  font-size:24px;
+  font-weight:700;
+  margin-bottom:25px;
+}
+.options{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:25px;
+}
+.option-card{
+  background:#f1f8ff;
+  padding:28px;
+  border-radius:20px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.3s;
+  border:1px solid #d6e8ff;
+}
+.option-card:hover{
+  background:#d6ecff;
+  transform:translateY(-7px);
+  box-shadow:0 16px 35px rgba(0,0,0,0.18);
+}
+.price{
+  font-size:22px;
+  font-weight:700;
+  color:#0a66c2;
+}
+.hidden{display:none;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="logo">
+      <img src="logo.png">
+    </div>
+
+    <div class="caption">Start your journey to Excellence</div>
+
+    <div class="course-card" id="cardIPO" onclick="showOptions('IPO')">
+      Purchase for IPO
+    </div>
+
+    <div class="course-card" id="cardPASA" onclick="showOptions('PA/SA')">
+      Purchase for PA / SA
+    </div>
+
+    <div class="course-card" id="cardPM" onclick="showOptions('Postman')">
+      Purchase for Postman
+    </div> 
+
+   <div class="course-card" id="cardPM" onclick="showOptions('MTS')">
+      Purchase for MTS
+    </div>
+
+    <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="student-info">
+      <span id="studentName">User</span>
+      <span id="studentMobile"></span>
+    </div>
+
+    <div id="purchaseSection" class="hidden">
+      <div class="options-title" id="courseTitle"></div>
+      <div class="options" id="optionsContainer"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.getElementById("studentName").innerText =
+  localStorage.getItem("userName") || "User";
+
+document.getElementById("studentMobile").innerText =
+  localStorage.getItem("userMobile") || "";
+
+const pricing={
+  "IPO":[
+    {title:"Study-Material-IPO",price:3000},
+    {title:"Practice-Set-IPO",price:3000},
+    {title:"Study Material+Practice Set-IPO",price:5000}
+  ],
+  "PA/SA":[
+    {title:"Study-Material-PASA",price:2000},
+    {title:"Practice-Set-PASA",price:2000},
+    {title:"Study Material+Practice Set-PASA",price:3000}
+  ],
+  "Postman":[
+    {title:"Study-Material-POSTMAN",price:1500},
+    {title:"Practice-Set-POSTMAN",price:1500},
+    {title:"Study Material+Practice Set-POSTMAN",price:2500}
+  ],
+  "MTS":[
+    {title:"Study-Material-MTS",price:1500},
+    {title:"Practice-Set-MTS",price:1500},
+    {title:"Study Material+Practice Set-MTS",price:2500}
+  ]
+
+};
+
+/* 🔑 FILTER BASED ON EXAM NAME */
+/* 🔑 SAFE FILTER BASED ON EXAM NAME */
+const exam = (localStorage.getItem("examName") || "").trim();
+
+/* Card references */
+const cardIPO  = document.getElementById("cardIPO");
+const cardPASA = document.getElementById("cardPASA");
+const cardPM   = document.getElementById("cardPM");
+const cardMTS  = document.getElementById("cardMTS");
+
+/* Show all by default */
+cardIPO.style.display  = "block";
+cardPASA.style.display = "block";
+cardPM.style.display   = "block";
+cardMTS.style.display   = "block";
+
+/* Apply filter only if exam name is valid */
+if(exam){
+  cardIPO.style.display  = "none";
+  cardPASA.style.display = "none";
+  cardPM.style.display   = "none";
+  cardMTS.style.display   = "none";
+
+
+  if(exam === "IPO"){
+    cardIPO.style.display = "block";
+    showOptions("IPO");
+  }
+  else if(exam === "PA/SA"){
+    cardPASA.style.display = "block";
+    showOptions("PA/SA");
+  }
+  else if(exam === "Postman" ){
+    cardPM.style.display = "block";
+    showOptions("Postman");
+  }
+  else if(exam ===  "MTS"){
+    cardMTS.style.display = "block";
+    showOptions("MTS");
+  }
+
+}
+
+function showOptions(course){
+  document.getElementById("purchaseSection").classList.remove("hidden");
+  document.getElementById("courseTitle").innerText =
+    course + " – Choose Your Plan";
+
+  const box=document.getElementById("optionsContainer");
+  box.innerHTML="";
+
+  pricing[course].forEach(item=>{
+    const card=document.createElement("div");
+    card.className="option-card";
+    card.innerHTML=`
+      <h3>${item.title}</h3>
+      <div class="price">₹ ${item.price}</div>`;
+    card.onclick=()=>proceedToPayment(course,item.title,item.price);
+    box.appendChild(card);
+  });
+}
+
+function proceedToPayment(course,plan,amount){
+  const params=new URLSearchParams({course,plan,amount});
+  window.location.href="payment.html?"+params.toString();
+}
+
+function goBack(){
+  window.location.href="dash.html";
+}
+</script>
+
+</body>
+</html>

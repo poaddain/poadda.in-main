@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Materials - IPO</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6fb;
+}
+header {
+    background: linear-gradient(135deg, #ffec99, #ffd54f);
+    padding: 12px 16px 14px;
+}
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo-box img {
+    height: 45px;
+}
+.caption {
+    font-size: 18px;
+    font-weight: 600;
+    color: #5a4300;
+}
+.user-info {
+    font-size: 13px;
+    text-align: right;
+    font-weight: bold;
+    color: #5a4300;
+}
+#welcome {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 20px;
+    color: #5a4300;
+}
+.container {
+    display: flex;
+    height: calc(100vh - 120px);
+}
+.left {
+    width: 25%;
+    background: linear-gradient(180deg, #fff3b0, #ffe082);
+    padding: 30px 14px;
+    overflow-y: auto;
+}
+.paper {
+    margin-bottom: 14px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,.12);
+}
+.paper-header {
+    background: #0056d2;
+    color: #fff;
+    padding: 14px;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+.paper.active .paper-header {
+    background: #003f9e;
+}
+.paper-content {
+    display: none;
+    background: #f9fbff;
+}
+.topic {
+    padding: 12px 14px;
+    border-bottom: 1px solid #e0e6f5;
+    cursor: pointer;
+    font-size: 14px;
+}
+.topic:hover {
+    background: #eef3ff;
+}
+.back-btn {
+    margin-top: 80px;
+    display: block;
+    text-align: center;
+    padding: 12px;
+    background: #0056d2;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.right {
+    width: 75%;
+    padding: 20px;
+}
+iframe {
+    width: 100%;
+    height: 72vh;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+}
+.download {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 8px 14px;
+    background: #0056d2;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+}
+@media (max-width: 768px) {
+    .container { flex-direction: column; }
+    .left, .right { width: 100%; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo-box">
+            <img src="logo.png">
+            <div class="caption">POAdda – A journey towards excellence</div>
+        </div>
+        <div class="user-info" id="userInfo"></div>
+    </div>
+    <h2 id="welcome">Welcome to the IPO Study Materials 👋</h2>
+</header>
+
+<div class="container">
+    <div class="left" id="paperList">
+        <a href="dash.html" class="back-btn">← Back to Dashboard</a>
+    </div>
+
+    <div class="right">
+        <h3 id="pdfTitle">Select a chapter</h3>
+        <div id="pdfSection" style="display:none;">
+            <a id="downloadBtn" class="download" download>Download PDF</a>
+            <iframe id="pdfViewer"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzFnV9L_or6RXWDsKwUAp4s4HUOJf7umVsrvpMr7LiUZMK7PFahDXiR3cl6t4orGTBBmQ/exec";
+
+/* USER INFO */
+(() => {
+    const p = new URLSearchParams(location.search);
+    if (p.get("name") && p.get("mobile")) {
+        localStorage.setItem("userName", p.get("name"));
+        localStorage.setItem("userMobile", p.get("mobile"));
+    }
+    document.getElementById("userInfo").innerHTML =
+        `${localStorage.getItem("userName") || "Student"}<br>
+         ${localStorage.getItem("userMobile") || ""}`;
+})();
+
+/* LOAD DATA */
+fetch(SCRIPT_URL)
+.then(r => r.json())
+.then(r => {
+    const data = r.data;
+
+    const columns = [
+        { chapter: 0, pdf: 1 },
+        { chapter: 2, pdf: 3 },
+        { chapter: 4, pdf: 5 }
+    ];
+
+    columns.forEach(col => {
+        const cardTitle = data[0][col.chapter];
+        if (!cardTitle) return;
+
+        const paper = document.createElement("div");
+        paper.className = "paper";
+
+        const header = document.createElement("div");
+        header.className = "paper-header";
+        header.innerHTML = `<span>${cardTitle}</span><span>+</span>`;
+
+        const content = document.createElement("div");
+        content.className = "paper-content";
+
+        header.onclick = () => {
+            const open = paper.classList.contains("active");
+            document.querySelectorAll(".paper").forEach(p => {
+                p.classList.remove("active");
+                p.querySelector(".paper-content").style.display = "none";
+                p.querySelector(".paper-header span:last-child").innerText = "+";
+            });
+            if (!open) {
+                paper.classList.add("active");
+                content.style.display = "block";
+                header.querySelector("span:last-child").innerText = "−";
+            }
+        };
+
+        for (let i = 1; i < data.length; i++) {
+            const name = data[i][col.chapter];
+            const link = data[i][col.pdf];
+
+            if (name) {
+                const t = document.createElement("div");
+                t.className = "topic";
+                t.innerText = name;
+                if (link) {
+                    t.onclick = () => openPDF(link);
+                }
+                content.appendChild(t);
+            }
+        }
+
+        paper.append(header, content);
+        document.getElementById("paperList")
+            .insertBefore(paper, document.querySelector(".back-btn"));
+    });
+});
+
+/* OPEN GOOGLE DRIVE PDF */
+function openPDF(value) {
+    let fileId = value.trim();
+
+    if (fileId.includes("drive.google.com")) {
+        let m = fileId.match(/\/d\/([^\/]+)/);
+        if (m && m[1]) fileId = m[1];
+        else if (fileId.includes("id="))
+            fileId = fileId.split("id=")[1].split("&")[0];
+    }
+
+    pdfSection.style.display = "block";
+    pdfViewer.src = `https://drive.google.com/file/d/${fileId}/preview`;
+    downloadBtn.href = `https://drive.google.com/file/d/${fileId}/view`;
+}
+</script>
+
+</body>
+</html>

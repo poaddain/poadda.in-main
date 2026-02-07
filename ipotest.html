@@ -1,0 +1,280 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPO Test Zone</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #ffb347, #ff6a6a);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      margin: 30px 0 20px 0;
+      position: relative;
+      width: 100%;
+    }
+    header img {
+      width: 120px;
+      animation: floatLogo 3s ease-in-out infinite;
+    }
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    #mobileDisplay {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #fff;
+      background: rgba(0,0,0,0.4);
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      width: 90%;
+      max-width: 450px;
+      margin-top: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.9);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .subscribe-box {
+      background: rgba(255,255,255,0.9);
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: left;
+      width: 90%;
+      max-width: 450px;
+      margin-top: 30px;
+      display: none;
+    }
+    .subscribe-box h2 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 15px;
+    }
+    .subscribe-box h3 {
+      color: #444;
+      margin: 10px 0;
+    }
+    .subscribe-box label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .subscribe-box input[type="radio"] {
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+    .subscribe-box button {
+      display: block;
+      margin: 20px auto 0 auto;
+      background: #2196f3;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .subscribe-box button:hover {
+      background: #1976d2;
+      transform: scale(1.05);
+    }
+    .back-btn {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      background: #222;
+      color: #fff;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      transition: all 0.25s ease;
+    }
+    .back-btn:hover {
+      background: #000;
+      transform: translateX(-50%) scale(1.05);
+    }
+    .loader {
+      display: none;
+      margin-top: 40px;
+    }
+    .loader img {
+      width: 70px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo">
+    <div id="mobileDisplay"></div>
+  </header>
+
+  <div class="cards" id="cardsSection">
+    <div class="card" onclick="location.href='chapters.html'">
+      <i class="fas fa-book-open"></i> Free Trial Zone
+    </div>
+    <div class="card" id="proCard" style="display:none" onclick="location.href='ipopro.html'">
+      <i class="fas fa-crown"></i> Pro Members
+    </div>
+    <div class="card" id="rankCard" style="display:none" onclick="location.href='rank.html'">
+      <i class="fas fa-trophy"></i> All India Ranker Test
+    </div>
+  </div>
+
+  <div class="loader" id="loader">
+    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
+  </div>
+
+  <div class="subscribe-box" id="subscribeBox">
+    <h2 id="subTitle">Subscribe Your Zone</h2>
+    <div id="subscriptionOptions">
+      <h3>Select your plan:</h3>
+      <label>
+        <input type="radio" name="plan" value="pro">
+        <b>Pro Member</b> – All topic practice sets & All India Ranking Test Paper1 & Paper2 (Just Rs.1500/-)
+      </label>
+      <label>
+        <input type="radio" name="plan" value="ranker">
+        <b>Ranker</b> – All India Ranking Test for Paper1 & Paper3, 4 Sets (Just Rs.750/-)
+      </label>
+    </div>
+    <button onclick="goToPayment()">Go to Payment</button>
+  </div>
+
+  <button class="back-btn" onclick="location.href='ipo.html'">⬅ Back</button>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwb9jbuJhS11aIgd5AFeIWO6WNY0I3IqhrAWVeoLcCNff9Yloy54fWev9qgEBPQgbfAjw/exec";
+    const mobileDisplay = document.getElementById('mobileDisplay');
+    const subscribeBox = document.getElementById('subscribeBox');
+    const proCard = document.getElementById('proCard');
+    const rankCard = document.getElementById('rankCard');
+    const loader = document.getElementById('loader');
+    const subscriptionOptions = document.getElementById('subscriptionOptions');
+    const subTitle = document.getElementById('subTitle');
+
+    window.onload = async () => {
+      let mobile = localStorage.getItem("mobile");
+      if (!mobile) {
+        mobileDisplay.innerText = "📱 Not logged in";
+        showLimitedAccess();
+        return;
+      }
+
+      mobileDisplay.innerText = "📱 " + mobile;
+      loader.style.display = "block";
+
+      try {
+        const response = await fetch(`${scriptURL}?mobile=${mobile}`);
+        const data = await response.json();
+        loader.style.display = "none";
+
+        if (!data.found) {
+          // not found → show payment box for both plans
+          showLimitedAccess("both");
+        } else if (data.access === "all") {
+          // full access → show all 3 cards
+          proCard.style.display = "flex";
+          rankCard.style.display = "flex";
+          subscribeBox.style.display = "none";
+        } else if (data.access === "ranker") {
+          // partial → show ranker card + pro payment only
+          rankCard.style.display = "flex";
+          showLimitedAccess("proOnly");
+        } else {
+          showLimitedAccess("both");
+        }
+      } catch (e) {
+        console.error("Error:", e);
+        loader.style.display = "none";
+        showLimitedAccess("both");
+      }
+    };
+
+    function showLimitedAccess(mode = "both") {
+      proCard.style.display = "none";
+      rankCard.style.display = "none";
+      subscribeBox.style.display = "block";
+
+      if (mode === "proOnly") {
+        subTitle.innerText = "Upgrade to Pro Member";
+        subscriptionOptions.innerHTML = `
+          <label>
+            <input type="radio" name="plan" value="pro" checked>
+            <b>Pro Member</b> – All topic practice sets & All India Ranking Test Paper1 & Paper2 (Just Rs.1500/-)
+          </label>`;
+      } else {
+        subTitle.innerText = "Subscribe Your Zone";
+        subscriptionOptions.innerHTML = `
+          <h3>Select your plan:</h3>
+          <label>
+            <input type="radio" name="plan" value="pro">
+            <b>Pro Member</b> – All topic practice sets & All India Ranking Test Paper1 & Paper2 (Just Rs.1500/-)
+          </label>
+          <label>
+            <input type="radio" name="plan" value="ranker">
+            <b>Ranker</b> – All India Ranking Test for Paper1 & Paper3, 4 Sets (Just Rs.750/-)
+          </label>`;
+      }
+    }
+
+    function goToPayment() {
+      const selected = document.querySelector('input[name="plan"]:checked');
+      if (!selected) {
+        alert("Please select a plan before proceeding.");
+        return;
+      }
+      if (selected.value === "pro") {
+        window.location.href = "https://rzp.io/rzp/vaEyCKyJ";
+      } else {
+        window.location.href = "https://rzp.io/rzp/RankerPaymentLink";
+      }
+    }
+  </script>
+</body>
+</html>
+```

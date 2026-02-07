@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>POADDA Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --yellow:#ffcc00;
+  --yellow-soft:rgba(255,204,0,.25);
+}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#fff3b0,#ffd84d,#ffcc00);
+  min-height:100vh;
+  color:#222;
+}
+
+/* HEADER */
+header{
+  text-align:center;
+  padding:22px 15px 10px;
+}
+
+.logo{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+
+.logo img{height:90px;}
+
+#welcome{
+  margin-top:12px;
+  font-size:22px;
+}
+
+/* LAYOUT */
+.main{
+  max-width:1100px;
+  margin:30px auto;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:22px;
+}
+
+@media(max-width:900px){
+  .main{grid-template-columns:1fr;}
+}
+
+/* GLASS */
+.glass{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(18px);
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  border:1px solid var(--yellow-soft);
+}
+
+.glass h3{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  margin:0 0 14px;
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(255,204,0,.4);
+}
+
+.glass h3 span:last-child{
+  text-align:center;
+  font-weight:700;
+}
+
+/* VALUES */
+.single,.value{
+  font-weight:600;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:8px 0;
+}
+
+.value{
+  padding:12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.18);
+}
+
+.clickable{
+  cursor:pointer;
+  transition:.25s;
+}
+
+.clickable:hover{
+  background:var(--yellow-soft);
+  transform:scale(1.03);
+}
+
+/* PLUS */
+.plus{
+  font-weight:900;
+  font-size:26px;              /* BIG plus */
+  margin-right:10px;
+  color:#ff6a00;               /* distinct color */
+  display:inline-block;
+  cursor:pointer;              /* pointer on hover */
+  transition:0.3s ease;
+}
+
+
+.value:hover .plus{
+  transform:rotate(90deg) scale(1.2);
+}
+
+/* PERFORMANCE */
+.perf-item{
+  display:flex;
+  justify-content:space-between;
+  padding:10px;
+  margin:8px 0;
+  border-radius:14px;
+  background:rgba(255,255,255,.18);
+  font-weight:600;
+}
+
+/* LOGOUT */
+.logout{
+  margin:30px auto 40px;
+  display:block;
+  width:200px;
+  padding:14px;
+  border:none;
+  border-radius:30px;
+  background:#222;
+  color:#fff;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+}
+.logout:hover{background:#000;}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="logo.png">
+    <p><b>POADDA – A journey towards excellence.</b></p>
+  </div>
+  <h2 id="welcome">Welcome 👋</h2>
+</header>
+
+<section class="main">
+
+<div>
+  <!-- 1st GLASS -->
+  <div class="glass">
+    <h3>
+      <span>Your Enrolled Course</span>
+      <span>Validity</span>
+    </h3>
+
+    <div class="single value clickable" id="cVal"></div>
+
+
+    <div class="row" id="rowDE">
+      <div class="value clickable" id="dVal"></div>
+      <div class="value" id="eVal"></div>
+    </div>
+
+    <div class="row" id="rowFG">
+      <div class="value clickable" id="fVal"></div>
+      <div class="value" id="gVal"></div>
+    </div>
+
+    <div class="row" id="rowHI">
+      <div class="value clickable" id="hVal"></div>
+      <div class="value" id="iVal"></div>
+    </div>
+  </div>
+
+  <!-- 2nd GLASS -->
+  <div class="glass" style="margin-top:22px;">
+    <h3><span>You may add ---</span></h3>
+
+    <div class="value" id="kVal">
+      <span class="plus">＋</span><span class="text"></span>
+    </div>
+
+    <div class="value" id="lVal" style="margin-top:10px;">
+      <span class="plus">＋</span><span class="text"></span>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT -->
+<div class="glass">
+  <h3><span>Student's Performance</span></h3>
+
+  <div class="perf-item" id="mBox"><span id="mLabel"></span><span id="mVal"></span></div>
+  <div class="perf-item" id="nBox"><span id="nLabel"></span><span id="nVal"></span></div>
+  <div class="perf-item" id="oBox"><span id="oLabel"></span><span id="oVal"></span></div>
+  <div class="perf-item" id="pBox"><span id="pLabel"></span><span id="pVal"></span></div>
+  <div class="perf-item" id="qBox"><span id="qLabel"></span><span id="qVal"></span></div>
+</div>
+
+</section>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+<!-- MODAL -->
+<div id="plusModal" style="display:none;position:fixed;inset:0;
+background:rgba(0,0,0,.6);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:#fff;padding:25px;border-radius:20px;
+  width:90%;max-width:360px;text-align:center;">
+    <h3>Add New Course</h3>
+    <p>You will be redirected to purchase page.</p>
+    <button onclick="location.href='purchase.html'"
+      style="padding:12px 22px;border:none;border-radius:25px;
+      background:#ffcc00;font-weight:800;cursor:pointer;">
+      Continue
+    </button>
+    <div onclick="closeModal()" style="margin-top:12px;cursor:pointer;font-weight:700">
+      Cancel
+    </div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxUsrfTteoJMK5j5qnEspa_ZKxS1dpp63o_WboQl48m22o_CBJ8CbzpLCXXG8uKaGOw-w/exec";
+const mobile=localStorage.getItem("mobile");
+const examName = localStorage.getItem("examName"); 
+
+if(!mobile) location.replace("login.html");
+history.pushState(null,null,location.href);
+window.onpopstate=()=>history.go(1);
+
+fetch(`${SCRIPT_URL}?mobile=${mobile}`)
+.then(r=>r.json())
+.then(d=>{
+  welcome.innerText="Welcome 👋 "+(d.name||"");
+  localStorage.setItem("userName", d.name || "");
+  localStorage.setItem("userMobile", mobile);
+
+  setVal(cVal,d.C);
+  setRow(rowDE,dVal,d.D,eVal,d.E);
+  setRow(rowFG,fVal,d.F,gVal,d.G);
+  setRow(rowHI,hVal,d.H,iVal,d.I);
+
+  setPlus(kVal,d.K);
+  setPlus(lVal,d.L);
+
+  setPerf("m",d.performance.M);
+  setPerf("n",d.performance.N);
+  setPerf("o",d.performance.O);
+  setPerf("p",d.performance.P);
+  setPerf("q",d.performance.Q);
+
+  document.querySelectorAll(".clickable").forEach(el=>{
+    el.onclick=()=>{
+      const txt=el.innerText.replace("＋","").trim();
+      if(txt) location.href=txt+".html";
+    };
+  });
+
+  document.querySelectorAll(".plus").forEach(p=>{
+    p.onclick=e=>{
+      e.stopPropagation();
+      plusModal.style.display="flex";
+    };
+  });
+});
+
+function setVal(el,v){
+  if(!v){el.style.display="none";return;}
+  el.innerText=v;
+}
+
+function setRow(r,a,av,b,bv){
+  if(!av&&!bv){r.style.display="none";return;}
+  setVal(a,av);setVal(b,bv);
+}
+
+function setPlus(el,v){
+  if(!v){el.style.display="none";return;}
+  el.querySelector(".text").innerText=v;
+}
+
+function setPerf(p,o){
+  if(!o.value){document.getElementById(p+"Box").style.display="none";return;}
+  document.getElementById(p+"Label").innerText=o.label;
+  document.getElementById(p+"Val").innerText=o.value;
+}
+
+function closeModal(){plusModal.style.display="none";}
+function logout(){
+  if (confirm("Are you sure you want to logout?")) {
+    localStorage.clear();
+    location.replace("login.html");
+  }
+}
+
+
+</script>
+
+</body>
+</html>

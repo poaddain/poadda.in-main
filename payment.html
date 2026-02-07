@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment</title>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<style>
+body{margin:0;font-family:Arial;background:#f4f6fb}
+
+/* Header */
+header{
+  background:linear-gradient(135deg,#0056d2,#003f9e);
+  color:#fff;
+  padding:14px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.container{max-width:600px;margin:30px auto;padding:20px}
+
+.card{
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);
+  padding:20px
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:12px
+}
+
+.amount{
+  font-size:22px;
+  font-weight:bold;
+  color:#0056d2
+}
+
+.pay-btn{
+  width:100%;
+  padding:14px;
+  background:#3399cc;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer
+}
+
+/* ===== Spinner ===== */
+.spinner-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
+}
+
+.spinner{
+  width:55px;
+  height:55px;
+  border:6px solid #dbe7f3;
+  border-top:6px solid #3399cc;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+/* ===== Success Popup ===== */
+.success-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.success-card{
+  background:#fff;
+  width:360px;
+  padding:30px 25px;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  animation:pop .25s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(.8);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+.checkmark-circle{
+  width:90px;
+  height:90px;
+  margin:0 auto 15px;
+}
+
+.checkmark{
+  width:100%;
+  height:100%;
+}
+
+.checkmark-circle-bg{
+  fill:none;
+  stroke:#2ecc71;
+  stroke-width:4;
+  stroke-dasharray:157;
+  stroke-dashoffset:157;
+  animation:circle 0.6s ease forwards;
+}
+
+.checkmark-check{
+  fill:none;
+  stroke:#2ecc71;
+  stroke-width:4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-dasharray:48;
+  stroke-dashoffset:48;
+  animation:check 0.35s ease forwards;
+  animation-delay:.6s;
+}
+
+@keyframes circle{to{stroke-dashoffset:0}}
+@keyframes check{to{stroke-dashoffset:0}}
+
+.success-card h2{
+  color:#2ecc71;
+  margin:10px 0;
+}
+
+.success-card p{
+  font-size:14px;
+  color:#555;
+  margin-bottom:20px;
+  line-height:1.6;
+}
+
+.success-card button{
+  background:#3399cc;
+  color:#fff;
+  border:none;
+  padding:12px 22px;
+  border-radius:8px;
+  font-size:15px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>Payment</h2>
+  <div style="text-align:right">
+    <div id="studentName" style="font-weight:700"></div>
+    <div id="studentMobile" style="font-size:13px;opacity:.9"></div>
+    <div id="mobileDisplay" style="font-size:13px"></div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="card">
+    <div class="row"><b>Course</b><span id="course"></span></div>
+    <div class="row"><b>Plan</b><span id="plan"></span></div>
+    <div class="row">
+      <b>Amount</b>
+      <span class="amount">₹ <span id="amount"></span></span>
+    </div>
+
+    <button class="pay-btn" onclick="payNow()">Pay with Razorpay</button>
+  </div>
+</div>
+
+<!-- Spinner -->
+<div id="spinner" class="spinner-overlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- Success Popup -->
+<div id="successPopup" class="success-overlay">
+  <div class="success-card">
+    <div class="checkmark-circle">
+      <svg class="checkmark" viewBox="0 0 52 52">
+        <circle class="checkmark-circle-bg" cx="26" cy="26" r="25"/>
+        <path class="checkmark-check" d="M14 27l7 7 17-17"/>
+      </svg>
+    </div>
+
+    <h2>Payment Successful</h2>
+    <p>
+      Thank you for completing your payment.<br>
+      Your course access will be activated within 5 Min.<br>
+      Refresh your Dashboard after 2 Min.<br><br>
+      Welcome to <b>POAdda</b> 🚀
+    </p>
+
+    <button onclick="goToDashboard()">Go to Dashboard</button>
+  </div>
+</div>
+
+<script>
+window.onload = () => {
+  let mobile =
+  localStorage.getItem("userMobile") ||
+  localStorage.getItem("mobile") ||
+  "";
+
+  document.getElementById("mobileDisplay").innerText =
+    mobile ? "📱 " + mobile : "📱 Not logged in";
+};
+
+const params = new URLSearchParams(location.search);
+
+const storedMobile =
+  localStorage.getItem("userMobile") ||
+  localStorage.getItem("mobile") ||
+  "";
+
+const data = {
+  name: localStorage.getItem("userName") || "",
+  mobile: storedMobile,
+  course: params.get("course"),
+  plan: params.get("plan"),
+  amount: params.get("amount")
+};
+
+document.getElementById("studentName").innerText = data.name || "Student";
+document.getElementById("studentMobile").innerText = data.mobile || "";
+document.getElementById("course").innerText = data.course;
+document.getElementById("plan").innerText = data.plan;
+document.getElementById("amount").innerText = data.amount;
+
+const RAZORPAY_KEY = "rzp_test_SBiWOOEgeKGwTI";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTRAbNt111hLjc3vokFIR14h0E8H0bayMYSkFTHauV6wmsc-LkOuUI-Fwks-nS7RpC/exec";
+
+function payNow() {
+  const options = {
+    key: RAZORPAY_KEY,
+    amount: data.amount * 100,
+    currency: "INR",
+    name: "POAdda",
+    description: data.course + " - " + data.plan,
+    handler: function (res) {
+      document.getElementById("spinner").style.display = "flex";
+      savePayment(res.razorpay_payment_id, "SUCCESS");
+    },
+    prefill: {
+      name: data.name,
+      contact: data.mobile
+    },
+    theme: { color: "#3399cc" }
+  };
+
+  new Razorpay(options).open();
+}
+
+function savePayment(paymentId, status) {
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      ...data,
+      paymentId,
+      status
+    })
+  }).then(() => {
+    document.getElementById("spinner").style.display = "none";
+    document.getElementById("successPopup").style.display = "flex";
+  });
+}
+
+function goToDashboard(){
+  window.location.href = "dash.html";
+}
+</script>
+
+</body>
+</html>
