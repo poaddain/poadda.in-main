@@ -197,14 +197,29 @@ const downloadBtn = document.getElementById("downloadBtn");
 /* USER INFO */
 (() => {
     const p = new URLSearchParams(location.search);
-    if (p.get("name") && p.get("mobile")) {
-        localStorage.setItem("userName", p.get("name"));
-        localStorage.setItem("userMobile", p.get("mobile"));
-    }
+
+    // collect name & mobile from all possible sources
+    const name =
+        p.get("name") ||
+        localStorage.getItem("userName") ||
+        localStorage.getItem("name") ||
+        "";
+
+    const mobile =
+        p.get("mobile") ||
+        localStorage.getItem("userMobile") ||
+        localStorage.getItem("mobile") ||
+        "";
+
+    // normalize storage (future-proof)
+    if (name) localStorage.setItem("userName", name);
+    if (mobile) localStorage.setItem("userMobile", mobile);
+
+    // show on UI
     document.getElementById("userInfo").innerHTML =
-        `${localStorage.getItem("userName") || "Student"}<br>
-         ${localStorage.getItem("userMobile") || ""}`;
+        `${name || "username"}<br>${mobile}`;
 })();
+
 
 /* LOAD CHAPTERS */
 fetch(SCRIPT_URL)
