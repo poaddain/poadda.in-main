@@ -20,24 +20,10 @@ body{
 }
 
 /* HEADER */
-header{
-  text-align:center;
-  padding:22px 15px 10px;
-}
-
-.logo{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-}
-
+header{text-align:center;padding:22px 15px 10px;}
+.logo{display:flex;flex-direction:column;align-items:center;gap:8px;}
 .logo img{height:90px;}
-
-#welcome{
-  margin-top:12px;
-  font-size:22px;
-}
+#welcome{margin-top:12px;font-size:22px;}
 
 /* LAYOUT */
 .main{
@@ -48,10 +34,7 @@ header{
   grid-template-columns:2fr 1fr;
   gap:22px;
 }
-
-@media(max-width:900px){
-  .main{grid-template-columns:1fr;}
-}
+@media(max-width:900px){.main{grid-template-columns:1fr;}}
 
 /* GLASS */
 .glass{
@@ -62,63 +45,38 @@ header{
   box-shadow:0 10px 30px rgba(0,0,0,.35);
   border:1px solid var(--yellow-soft);
 }
-
 .glass h3{
   display:grid;
   grid-template-columns:1fr 1fr;
-  align-items:center;
   margin:0 0 14px;
   padding-bottom:8px;
   border-bottom:1px solid rgba(255,204,0,.4);
 }
 
-.glass h3 span:last-child{
-  text-align:center;
-  font-weight:700;
-}
-
 /* VALUES */
-.single,.value{
+.value{
+  padding:12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.18);
   font-weight:600;
 }
-
+.single{margin-bottom:10px;}
 .row{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
   margin:8px 0;
 }
-
-.value{
-  padding:12px;
-  border-radius:14px;
-  background:rgba(255,255,255,.18);
-}
-
-.clickable{
-  cursor:pointer;
-  transition:.25s;
-}
-
-.clickable:hover{
-  background:var(--yellow-soft);
-  transform:scale(1.03);
-}
+.clickable{cursor:pointer;transition:.25s;}
+.clickable:hover{background:var(--yellow-soft);transform:scale(1.03);}
 
 /* PLUS */
 .plus{
   font-weight:900;
-  font-size:26px;              /* BIG plus */
+  font-size:26px;
   margin-right:10px;
-  color:#ff6a00;               /* distinct color */
-  display:inline-block;
-  cursor:pointer;              /* pointer on hover */
-  transition:0.3s ease;
-}
-
-
-.value:hover .plus{
-  transform:rotate(90deg) scale(1.2);
+  color:#ff6a00;
+  cursor:pointer;
 }
 
 /* PERFORMANCE */
@@ -146,7 +104,47 @@ header{
   font-weight:800;
   cursor:pointer;
 }
-.logout:hover{background:#000;}
+
+/* CHOOSER MODAL */
+.chooser-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.chooser-card{
+  background:#fff;
+  padding:28px;
+  border-radius:22px;
+  width:90%;
+  max-width:360px;
+  text-align:center;
+  animation:pop .3s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(.7);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+.chooser-btn{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border:none;
+  border-radius:30px;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+.study{background:#ffcc00;}
+.practice{background:#222;color:#fff;}
+.cancel{background:#eee;}
 </style>
 </head>
 
@@ -162,16 +160,12 @@ header{
 
 <section class="main">
 
+<!-- LEFT -->
 <div>
-  <!-- 1st GLASS -->
   <div class="glass">
-    <h3>
-      <span>Your Enrolled Course</span>
-      <span>Validity</span>
-    </h3>
+    <h3><span>Your Enrolled Course</span><span>Validity</span></h3>
 
     <div class="single value clickable" id="cVal"></div>
-
 
     <div class="row" id="rowDE">
       <div class="value clickable" id="dVal"></div>
@@ -189,7 +183,7 @@ header{
     </div>
   </div>
 
-  <!-- 2nd GLASS -->
+  <!-- YOU MAY ADD -->
   <div class="glass" style="margin-top:22px;">
     <h3><span>You may add ---</span></h3>
 
@@ -203,7 +197,7 @@ header{
   </div>
 </div>
 
-<!-- RIGHT -->
+<!-- RIGHT : PERFORMANCE -->
 <div class="glass">
   <h3><span>Student's Performance</span></h3>
 
@@ -218,39 +212,26 @@ header{
 
 <button class="logout" onclick="logout()">Logout</button>
 
-<!-- MODAL -->
-<div id="plusModal" style="display:none;position:fixed;inset:0;
-background:rgba(0,0,0,.6);z-index:999;align-items:center;justify-content:center;">
-  <div style="background:#fff;padding:25px;border-radius:20px;
-  width:90%;max-width:360px;text-align:center;">
-    <h3>Add New Course</h3>
-    <p>You will be redirected to purchase page.</p>
-    <button onclick="location.href='purchase.html'"
-      style="padding:12px 22px;border:none;border-radius:25px;
-      background:#ffcc00;font-weight:800;cursor:pointer;">
-      Continue
-    </button>
-    <div onclick="closeModal()" style="margin-top:12px;cursor:pointer;font-weight:700">
-      Cancel
-    </div>
+<!-- STUDY / PRACTICE CHOOSER -->
+<div id="chooser" class="chooser-overlay">
+  <div class="chooser-card">
+    <h3 id="chooserTitle"></h3>
+    <button class="chooser-btn study" onclick="goStudy()">📘 Study Material</button>
+    <button class="chooser-btn practice" onclick="goPractice()">📝 Practice Set</button>
+    <button class="chooser-btn cancel" onclick="closeChooser()">❌ Cancel</button>
   </div>
 </div>
 
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxUsrfTteoJMK5j5qnEspa_ZKxS1dpp63o_WboQl48m22o_CBJ8CbzpLCXXG8uKaGOw-w/exec";
 const mobile=localStorage.getItem("mobile");
-const examName = localStorage.getItem("examName"); 
 
-if(!mobile) location.replace("login.html");
-history.pushState(null,null,location.href);
-window.onpopstate=()=>history.go(1);
+let currentExam="";
 
 fetch(`${SCRIPT_URL}?mobile=${mobile}`)
 .then(r=>r.json())
 .then(d=>{
   welcome.innerText="Welcome 👋 "+(d.name||"");
-  localStorage.setItem("userName", d.name || "");
-  localStorage.setItem("userMobile", mobile);
 
   setVal(cVal,d.C);
   setRow(rowDE,dVal,d.D,eVal,d.E);
@@ -267,16 +248,18 @@ fetch(`${SCRIPT_URL}?mobile=${mobile}`)
   setPerf("q",d.performance.Q);
 
   document.querySelectorAll(".clickable").forEach(el=>{
-    el.onclick=()=>{
-      const txt=el.innerText.replace("＋","").trim();
-      if(txt) location.href=txt+".html";
-    };
-  });
-
-  document.querySelectorAll(".plus").forEach(p=>{
-    p.onclick=e=>{
+    el.onclick=e=>{
       e.stopPropagation();
-      plusModal.style.display="flex";
+      const link=el.dataset.link;
+      if(!link) return;
+
+      if(link.startsWith("Study-Material+Practice-Set")){
+        currentExam=link.split("-").pop();
+        chooserTitle.innerText="Choose for "+currentExam;
+        chooser.style.display="flex";
+        return;
+      }
+      location.href=link+".html";
     };
   });
 });
@@ -284,33 +267,50 @@ fetch(`${SCRIPT_URL}?mobile=${mobile}`)
 function setVal(el,v){
   if(!v){el.style.display="none";return;}
   el.innerText=v;
+  el.dataset.link=v;
 }
-
 function setRow(r,a,av,b,bv){
   if(!av&&!bv){r.style.display="none";return;}
   setVal(a,av);setVal(b,bv);
 }
+function setPlus(el, v){
+  if(!v){
+    el.style.display="none";
+    return;
+  }
 
-function setPlus(el,v){
-  if(!v){el.style.display="none";return;}
-  el.querySelector(".text").innerText=v;
+  const textSpan = el.querySelector(".text");
+  textSpan.innerText = v;
+
+  // make whole block clickable
+  el.style.cursor = "pointer";
+  el.onclick = () => {
+    location.href = "purchase.html";
+  };
+
+  // also make + explicitly clickable
+  const plus = el.querySelector(".plus");
+  plus.onclick = (e) => {
+    e.stopPropagation(); // prevent double trigger
+    location.href = "purchase.html";
+  };
 }
-
 function setPerf(p,o){
-  if(!o.value){document.getElementById(p+"Box").style.display="none";return;}
+  if(!o?.value){document.getElementById(p+"Box").style.display="none";return;}
   document.getElementById(p+"Label").innerText=o.label;
   document.getElementById(p+"Val").innerText=o.value;
 }
 
-function closeModal(){plusModal.style.display="none";}
+function goStudy(){location.href=`Study-Material-${currentExam}.html`;}
+function goPractice(){location.href=`Practice-Set-${currentExam}.html`;}
+function closeChooser(){chooser.style.display="none";}
+
 function logout(){
-  if (confirm("Are you sure you want to logout?")) {
+  if(confirm("Are you sure you want to logout?")){
     localStorage.clear();
     location.replace("login.html");
   }
 }
-
-
 </script>
 
 </body>
