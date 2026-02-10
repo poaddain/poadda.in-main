@@ -231,7 +231,12 @@ let currentExam="";
 fetch(`${SCRIPT_URL}?mobile=${mobile}`)
 .then(r=>r.json())
 .then(d=>{
-  welcome.innerText="Welcome 👋 "+(d.name||"");
+  // 🔐 STORE USER INFO GLOBALLY
+if (d.name) localStorage.setItem("userName", d.name);
+if (mobile) localStorage.setItem("userMobile", mobile);
+
+welcome.innerText = "Welcome 👋 " + (d.name || "");
+
 
   setVal(cVal,d.C);
   setRow(rowDE,dVal,d.D,eVal,d.E);
@@ -259,7 +264,12 @@ fetch(`${SCRIPT_URL}?mobile=${mobile}`)
         chooser.style.display="flex";
         return;
       }
-      location.href=link+".html";
+      const name = localStorage.getItem("userName") || "";
+const mob  = localStorage.getItem("userMobile") || "";
+
+location.href =
+  `${link}.html?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mob)}`;
+
     };
   });
 });
@@ -301,8 +311,19 @@ function setPerf(p,o){
   document.getElementById(p+"Val").innerText=o.value;
 }
 
-function goStudy(){location.href=`Study-Material-${currentExam}.html`;}
-function goPractice(){location.href=`Practice-Set-${currentExam}.html`;}
+function goStudy(){
+  const name = localStorage.getItem("userName") || "";
+  const mob  = localStorage.getItem("userMobile") || "";
+  location.href =
+    `Study-Material-${currentExam}.html?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mob)}`;
+}
+
+function goPractice(){
+  const name = localStorage.getItem("userName") || "";
+  const mob  = localStorage.getItem("userMobile") || "";
+  location.href =
+    `Practice-Set-${currentExam}.html?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mob)}`;
+}
 function closeChooser(){chooser.style.display="none";}
 
 function logout(){
