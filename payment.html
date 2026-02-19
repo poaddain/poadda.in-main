@@ -182,6 +182,9 @@ header{
     </div>
 
     <button class="pay-btn" onclick="payNow()">Pay with Razorpay</button>
+    <button class="pay-btn" style="background:#888;margin-top:10px"
+        onclick="goBack()">⬅ Back</button>
+
   </div>
 </div>
 
@@ -215,9 +218,15 @@ header{
 <script>
 window.onload = () => {
   let mobile =
-  localStorage.getItem("userMobile") ||
-  localStorage.getItem("mobile") ||
-  "";
+    localStorage.getItem("userMobile") ||
+    localStorage.getItem("mobile") ||
+    "";
+
+  mobile = mobile.replace(/\D/g, "").slice(-10);
+
+  if (mobile) {
+    localStorage.setItem("userMobile", mobile);
+  }
 
   document.getElementById("mobileDisplay").innerText =
     mobile ? "📱 " + mobile : "📱 Not logged in";
@@ -248,25 +257,44 @@ const RAZORPAY_KEY = "rzp_test_SBiWOOEgeKGwTI";
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTRAbNt111hLjc3vokFIR14h0E8H0bayMYSkFTHauV6wmsc-LkOuUI-Fwks-nS7RpC/exec";
 
 function payNow() {
+
+  // Ensure mobile is only 10 digits
+  let cleanMobile = (data.mobile || "").replace(/\D/g, "").slice(-10);
+
+  if (!cleanMobile || cleanMobile.length !== 10) {
+    alert("Mobile number missing. Please login again.");
+    return;
+  }
+
   const options = {
     key: RAZORPAY_KEY,
     amount: data.amount * 100,
     currency: "INR",
     name: "POAdda",
     description: data.course + " - " + data.plan,
+
     handler: function (res) {
       document.getElementById("spinner").style.display = "flex";
       savePayment(res.razorpay_payment_id, "SUCCESS");
     },
+
     prefill: {
-      name: data.name,
-      contact: data.mobile
+      name: data.name || "Student",
+      contact: cleanMobile,
+      email: ""   // optional but keeps structure clean
     },
+
+    notes: {
+      student_name: data.name,
+      student_mobile: cleanMobile
+    },
+
     theme: { color: "#3399cc" }
   };
 
   new Razorpay(options).open();
 }
+
 
 function savePayment(paymentId, status) {
   fetch(APPS_SCRIPT_URL, {
@@ -285,6 +313,11 @@ function savePayment(paymentId, status) {
 function goToDashboard(){
   window.location.href = "dash.html";
 }
+
+function goBack(){
+  window.history.back();
+}
+
 </script>
 
 </body>
