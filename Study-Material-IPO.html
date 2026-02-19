@@ -140,9 +140,113 @@ iframe {
 }
 
 @media (max-width: 768px) {
-    .container { flex-direction: column; }
-    .left, .right { width: 100%; }
+
+    body {
+        background: #f2f5ff;
+    }
+
+    header {
+        padding: 14px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .header-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+    }
+
+    .logo-box img {
+        height: 40px;
+    }
+
+    .caption {
+        font-size: 15px;
+    }
+
+    .user-info {
+        font-size: 12px;
+        text-align: center;
+    }
+
+    #welcome {
+        font-size: 18px;
+        margin-top: 8px;
+    }
+
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .left, .right {
+        width: 100%;
+        padding: 16px;
+    }
+
+    .left {
+        background: transparent;
+    }
+
+    .paper {
+        margin-bottom: 16px;
+        border-radius: 16px;
+    }
+
+    .paper-header {
+        font-size: 15px;
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .topic {
+        font-size: 14px;
+        padding: 14px;
+    }
+
+    .topic:active {
+        background: #dce7ff;
+    }
+
+    .right {
+        padding-top: 10px;
+    }
+
+    iframe {
+        height: 60vh;
+        border-radius: 16px;
+    }
+
+    .download {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+    }
+
+    .back-btn {
+        position: fixed;
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+        margin: 0;
+        padding: 14px;
+        font-size: 15px;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        z-index: 100;
+    }
+
+    .left {
+        padding-bottom: 90px; /* space for fixed button */
+    }
+
 }
+
 </style>
 </head>
 
