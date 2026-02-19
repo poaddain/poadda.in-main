@@ -19,6 +19,8 @@ body{
   display:flex;
   min-height:100vh;
 }
+
+/* LEFT PANEL */
 .left-panel{
   width:35%;
   padding:30px;
@@ -64,7 +66,7 @@ body{
   background:#d9ecff;
   color:#0a3d62;
   border:none;
-  padding:10px;
+  padding:12px;
   border-radius:22px;
   cursor:pointer;
   font-weight:600;
@@ -73,6 +75,8 @@ body{
 .back-btn:hover{
   background:#bcdfff;
 }
+
+/* RIGHT PANEL */
 .right-panel{
   width:65%;
   padding:35px;
@@ -120,6 +124,57 @@ body{
   color:#0a66c2;
 }
 .hidden{display:none;}
+
+
+/* ============================= */
+/* 📱 MOBILE RESPONSIVE VIEW */
+/* ============================= */
+@media (max-width:768px){
+
+  .container{
+    flex-direction:column;
+  }
+
+  .left-panel{
+    width:100%;
+    border-right:none;
+    border-bottom:1px solid #d7e7f7;
+    padding:20px;
+  }
+
+  .right-panel{
+    width:100%;
+    padding:20px;
+  }
+
+  .student-info{
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .course-card{
+    font-size:16px;
+  }
+
+  .options{
+    grid-template-columns:1fr;
+  }
+
+  .option-card{
+    padding:22px;
+  }
+
+  .back-btn{
+    margin-top:20px;
+    width:100%;
+  }
+
+  .options-title{
+    text-align:center;
+    font-size:20px;
+  }
+
+}
 </style>
 </head>
 
@@ -147,7 +202,7 @@ body{
       Purchase for Postman
     </div> 
 
-   <div class="course-card" id="cardPM" onclick="showOptions('MTS')">
+    <div class="course-card" id="cardMTS" onclick="showOptions('MTS')">
       Purchase for MTS
     </div>
 
@@ -170,6 +225,7 @@ body{
 </div>
 
 <script>
+// (Your full existing JS remains EXACTLY same — unchanged)
 document.getElementById("studentName").innerText =
   localStorage.getItem("userName") || "User";
 
@@ -197,32 +253,25 @@ const pricing={
     {title:"Practice-Set-MTS",price:1500},
     {title:"Study-Material+Practice-Set-MTS",price:2500}
   ]
-
 };
 
-/* 🔑 FILTER BASED ON EXAM NAME */
-/* 🔑 SAFE FILTER BASED ON EXAM NAME */
 const exam = (localStorage.getItem("examName") || "").trim();
 
-/* Card references */
 const cardIPO  = document.getElementById("cardIPO");
 const cardPASA = document.getElementById("cardPASA");
 const cardPM   = document.getElementById("cardPM");
 const cardMTS  = document.getElementById("cardMTS");
 
-/* Show all by default */
 cardIPO.style.display  = "block";
 cardPASA.style.display = "block";
 cardPM.style.display   = "block";
-cardMTS.style.display   = "block";
+cardMTS.style.display  = "block";
 
-/* Apply filter only if exam name is valid */
 if(exam){
   cardIPO.style.display  = "none";
   cardPASA.style.display = "none";
   cardPM.style.display   = "none";
-  cardMTS.style.display   = "none";
-
+  cardMTS.style.display  = "none";
 
   if(exam === "IPO"){
     cardIPO.style.display = "block";
@@ -232,15 +281,14 @@ if(exam){
     cardPASA.style.display = "block";
     showOptions("PA/SA");
   }
-  else if(exam === "Postman" ){
+  else if(exam === "Postman"){
     cardPM.style.display = "block";
     showOptions("Postman");
   }
-  else if(exam ===  "MTS"){
+  else if(exam === "MTS"){
     cardMTS.style.display = "block";
     showOptions("MTS");
   }
-
 }
 
 function showOptions(course){
@@ -274,4 +322,3 @@ function goBack(){
 
 </body>
 </html>
-
