@@ -145,6 +145,109 @@ header{text-align:center;padding:22px 15px 10px;}
 .study{background:#ffcc00;}
 .practice{background:#222;color:#fff;}
 .cancel{background:#eee;}
+/* ALL INDIA TEST BUTTON */
+.all-india-box{
+  position:fixed;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  background:linear-gradient(135deg,#ff6a00,#ffcc00);
+  color:#000;
+  padding:18px 16px;
+  border-radius:18px;
+  width:180px;
+  text-align:center;
+  font-weight:800;
+  box-shadow:0 8px 25px rgba(0,0,0,.35);
+  cursor:pointer;
+  z-index:999;
+  animation:pulse 1.5s infinite;
+}
+
+.all-india-box small{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+}
+
+.all-india-box .date{
+  font-size:14px;
+  margin:6px 0;
+}
+
+@keyframes pulse{
+  0%{transform:translateY(-50%) scale(1);}
+  50%{transform:translateY(-50%) scale(1.05);}
+  100%{transform:translateY(-50%) scale(1);}
+}
+
+@media(max-width:900px){
+  .all-india-box{
+    right:10px;
+    width:150px;
+    padding:14px;
+    font-size:14px;
+  }
+}
+/* AIR TEST CARD */
+.air-card{
+  position:fixed;
+  left:20px;
+  top:20%;
+  transform:translateY(-50%);
+  width:300px;
+  padding:25px 20px;
+  background:linear-gradient(135deg,#ff7a00,#ffcc00);
+  border-radius:25px;
+  box-shadow:0 15px 35px rgba(0,0,0,.4);
+  text-align:center;
+  font-weight:700;
+  cursor:pointer;
+  color:#111;
+  animation:floatPulse 2s infinite;
+  z-index:999;
+}
+
+.air-card h3{
+  margin:10px 0 8px;
+  font-size:20px;
+}
+
+.air-card p{
+  margin:6px 0;
+  font-size:15px;
+}
+
+.click-text{
+  margin-top:10px;
+  font-weight:900;
+}
+
+.live-ribbon{
+  position:absolute;
+  top:0;
+  left:0;
+  background:#d80000;
+  color:#fff;
+  padding:6px 14px;
+  font-size:13px;
+  font-weight:900;
+  border-top-left-radius:25px;
+  border-bottom-right-radius:20px;
+}
+
+@keyframes floatPulse{
+  0%{transform:translateY(-50%) scale(1);}
+  50%{transform:translateY(-50%) scale(1.05);}
+  100%{transform:translateY(-50%) scale(1);}
+}
+
+@media(max-width:900px){
+  .air-card{
+    width:250px;
+    right:10px;
+  }
+}
 </style>
 </head>
 
@@ -156,6 +259,7 @@ header{text-align:center;padding:22px 15px 10px;}
     <p><b>POADDA – A journey towards excellence.</b></p>
   </div>
   <h2 id="welcome">Welcome 👋</h2>
+  <h3 id="examName" style="margin-top:6px;font-weight:600;"></h3>
 </header>
 
 <section class="main">
@@ -235,10 +339,32 @@ fetch(`${SCRIPT_URL}?mobile=${mobile}`)
 if (d.name) localStorage.setItem("userName", d.name);
 if (mobile) localStorage.setItem("userMobile", mobile);
 
+
 welcome.innerText = "Welcome 👋 " + (d.name || "");
 
+const examEl = document.getElementById("examName");
 
-  setVal(cVal,d.C);
+const storedExam = localStorage.getItem("exam");
+const airBtn = document.getElementById("airTestBtn");
+
+if (storedExam === "PA/SA") {
+const endDate = new Date("March 8, 2026 23:59:59").getTime();
+  const now = new Date().getTime();
+ if (now < endDate) {
+    airBtn.style.display = "block";
+  } else {
+    airBtn.style.display = "none";
+  }
+
+} else {
+  airBtn.style.display = "none";
+}
+if (storedExam && storedExam.trim() !== "") {
+  examEl.innerText = "🎓 Exam: " + storedExam;
+  examEl.style.display = "block";
+} else {
+  examEl.style.display = "none";
+}  setVal(cVal,d.C);
   setRow(rowDE,dVal,d.D,eVal,d.E);
   setRow(rowFG,fVal,d.F,gVal,d.G);
   setRow(rowHI,hVal,d.H,iVal,d.I);
@@ -332,7 +458,19 @@ function logout(){
     location.replace("login.html");
   }
 }
+function goAIRT(){
+  const name = localStorage.getItem("userName") || "";
+  const mob  = localStorage.getItem("userMobile") || "";
+  location.href =
+    `AIRT-PA-SA.html?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mob)}`;
+}
 </script>
-
+<div id="airTestBtn" class="air-card" onclick="goAIRT()" style="display:none;">
+  <div class="live-ribbon">Free</div>
+  <h3>Full Test with Ranking (Free)</h3>
+  <p>Test duration: 07.03.2026 & 08.03.2026</p>
+<p>Result on 10.03.2026</p>
+  <div class="click-text">Click Here</div>
+</div>
 </body>
 </html>
