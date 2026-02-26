@@ -190,12 +190,9 @@
           showNotifier("Login Successful ✅", "success");
           setTimeout(() => {
             localStorage.setItem("mobile", data.mobile);
-            if (data.exam === "IPO") window.location.href = "dash.html";
-            else if (data.exam === "AAO") window.location.href = "dash.html";
-            else if (data.exam === "PA/SA") window.location.href = "dash.html";
-	    else if (data.exam === "POSTMAN") window.location.href = "dash.html";
-	    else if (data.exam === "MTS") window.location.href = "dash.html";
-          }, 2000);
+	    localStorage.setItem("exam", data.exam);
+            window.location.href = "dash.html";
+ 	 }, 2000);
         } else {
           showNotifier("❌ Invalid Mobile No, Password, or Exam!", "warning");
         }
