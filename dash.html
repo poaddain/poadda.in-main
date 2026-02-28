@@ -157,7 +157,7 @@ header{text-align:center;padding:22px 15px 10px;}
   border-radius:18px;
   width:180px;
   text-align:center;
-  font-weight:800;
+  font-weight:600;
   box-shadow:0 8px 25px rgba(0,0,0,.35);
   cursor:pointer;
   z-index:999;
@@ -189,63 +189,64 @@ header{text-align:center;padding:22px 15px 10px;}
     font-size:14px;
   }
 }
-/* AIR TEST CARD */
-.air-card{
-  position:fixed;
-  left:20px;
-  top:20%;
-  transform:translateY(-50%);
-  width:300px;
-  padding:25px 20px;
-  background:linear-gradient(135deg,#ff7a00,#ffcc00);
-  border-radius:25px;
-  box-shadow:0 15px 35px rgba(0,0,0,.4);
-  text-align:center;
+/* FULL TEST LONG BUTTON */
+.full-test-btn{
+  position:relative;
+  margin:18px auto 0;
+  width:90%;
+  max-width:750px;
+  padding:10px;
+  background:linear-gradient(135deg,#ff6a00,#ffcc00);
+  border:none;
+  border-radius:50px;
+  font-size:18px;
   font-weight:700;
+  text-align:center;
   cursor:pointer;
-  color:#111;
-  animation:floatPulse 2s infinite;
-  z-index:999;
+  box-shadow:0 12px 35px rgba(0,0,0,.35);
+  animation:pulseLong 1.5s infinite;
+  display:none;
+  overflow:hidden;
 }
 
-.air-card h3{
-  margin:10px 0 8px;
-  font-size:20px;
+.full-test-btn small{
+  display:block;
+  font-size:14px;
+  font-weight:700;
+  margin-top:6px;
 }
 
-.air-card p{
-  margin:6px 0;
-  font-size:15px;
-}
-
-.click-text{
-  margin-top:10px;
-  font-weight:900;
-}
-
-.live-ribbon{
+.live-badge{
   position:absolute;
   top:0;
-  left:0;
+  right:0;
   background:#d80000;
   color:#fff;
-  padding:6px 14px;
+  padding:6px 16px;
   font-size:13px;
   font-weight:900;
-  border-top-left-radius:25px;
-  border-bottom-right-radius:20px;
+  border-top-right-radius:50px;
+  border-bottom-left-radius:20px;
+  animation:blink 1s infinite;
 }
 
-@keyframes floatPulse{
-  0%{transform:translateY(-50%) scale(1);}
-  50%{transform:translateY(-50%) scale(1.05);}
-  100%{transform:translateY(-50%) scale(1);}
+@keyframes blink{
+  0%{opacity:1;}
+  50%{opacity:0.4;}
+  100%{opacity:1;}
 }
 
-@media(max-width:900px){
-  .air-card{
-    width:250px;
-    right:10px;
+@keyframes pulseLong{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.03);}
+  100%{transform:scale(1);}
+}
+
+@media(max-width:600px){
+  .full-test-btn{
+    width:100%;
+    font-size:16px;
+    padding:16px;
   }
 }
 </style>
@@ -260,6 +261,12 @@ header{text-align:center;padding:22px 15px 10px;}
   </div>
   <h2 id="welcome">Welcome 👋</h2>
   <h3 id="examName" style="margin-top:6px;font-weight:600;"></h3>
+<button id="airTestBtn" class="full-test-btn" onclick="goAIRT()">
+  <span id="airMainText">🚀 FULL TEST WITH RANKING (FREE)</span>
+  <h4> Test will be live on 7th & 8th March 2026</h4>
+  <small id="airSubText">Loading...</small>
+  <div id="liveBadge" class="live-badge" style="display:none;">LIVE NOW</div>
+</button>
 </header>
 
 <section class="main">
@@ -348,12 +355,45 @@ const storedExam = localStorage.getItem("exam");
 const airBtn = document.getElementById("airTestBtn");
 
 if (storedExam === "PA/SA") {
-const endDate = new Date("March 8, 2026 23:59:59").getTime();
+
+  const startDate = new Date("March 7, 2026 00:00:00").getTime();
+  const endDate   = new Date("March 8, 2026 23:59:59").getTime();
+  const resultDate= new Date("March 10, 2026 00:00:00").getTime();
   const now = new Date().getTime();
- if (now < endDate) {
+
+  if (now < endDate) {
     airBtn.style.display = "block";
+    startCountdown();
   } else {
     airBtn.style.display = "none";
+  }
+
+  function startCountdown(){
+    const interval = setInterval(() => {
+      const current = new Date().getTime();
+
+      if(current > endDate){
+        clearInterval(interval);
+        airBtn.style.display="none";
+        return;
+      }
+
+      if(current >= startDate && current <= endDate){
+        document.getElementById("liveBadge").style.display="block";
+        document.getElementById("airSubText").innerText =
+          "Exam Live • Ends 08.03.2026 11:59 PM";
+        return;
+      }
+
+      const distance = startDate - current;
+
+      const days = Math.floor(distance/(1000*60*60*24));
+      const hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+      const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+
+      document.getElementById("airSubText").innerText =
+        `Starts in ${days}d ${hours}h ${minutes}m`;
+    },1000);
   }
 
 } else {
@@ -462,15 +502,9 @@ function goAIRT(){
   const name = localStorage.getItem("userName") || "";
   const mob  = localStorage.getItem("userMobile") || "";
   location.href =
-    `AIRT-PA-SA.html?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mob)}`;
+    `AIR1-PASA.html?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mob)}`;
 }
 </script>
-<div id="airTestBtn" class="air-card" onclick="goAIRT()" style="display:none;">
-  <div class="live-ribbon">Free</div>
-  <h3>Full Test with Ranking (Free)</h3>
-  <p>Test duration: 07.03.2026 & 08.03.2026</p>
-<p>Result on 10.03.2026</p>
-  <div class="click-text">Click Here</div>
-</div>
+
 </body>
 </html>
