@@ -327,7 +327,7 @@ header{text-align:center;padding:22px 15px 10px;}
 <div id="chooser" class="chooser-overlay">
   <div class="chooser-card">
     <h3 id="chooserTitle"></h3>
-    <button class="chooser-btn study" onclick="goStudy()">📘 Study Material</button>
+    <button class="chooser-btn ftest" onclick="gofulltest()">📘 Full Test</button>
     <button class="chooser-btn practice" onclick="goPractice()">📝 Practice Set</button>
     <button class="chooser-btn cancel" onclick="closeChooser()">❌ Cancel</button>
   </div>
@@ -424,7 +424,7 @@ if (storedExam && storedExam.trim() !== "") {
       const link=el.dataset.link;
       if(!link) return;
 
-      if(link.startsWith("Study-Material+Practice-Set")){
+      if(link.startsWith("10 FULL Practice Set+Practice-Set")){
         currentExam=link.split("-").pop();
         chooserTitle.innerText="Choose for "+currentExam;
         chooser.style.display="flex";
@@ -482,6 +482,13 @@ function goStudy(){
   const mob  = localStorage.getItem("userMobile") || "";
   location.href =
     `Study-Material-${currentExam}.html?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mob)}`;
+}
+
+function gofulltest(){
+  const name = localStorage.getItem("userName") || "";
+  const mob  = localStorage.getItem("userMobile") || "";
+  location.href =
+    `FULL-TEST-${currentExam}.html?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mob)}`;
 }
 
 function goPractice(){
